@@ -19,6 +19,10 @@ const io = require("socket.io")(server, { cors: { origin: '*', } }); ;
 const router = express.Router();
 app.use(router);
 
+router.get("/", (req, res) => {
+    res.send({succes:true}).status(200);
+})
+
 router.post("/hangup", (req, res) => {
     let socketid = PIN_HAS_SOCKETID[req.body.pin]
     io.to(socketid).emit('hangup');
@@ -50,6 +54,7 @@ let SOCKETID_HAS_PIN = {}
 let interval;
 
 io.on("connection", (socket) => {
+    console.log("connection received")
     socket.on("PIN", (pin) => {
         PIN_HAS_SOCKETID[pin] = socket.id
         SOCKETID_HAS_PIN[socket.id] = pin
