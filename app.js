@@ -85,8 +85,8 @@ io.on("connection", (socket) => {
         })
 
         setTimeout(function(){
-            delete PIN_HAS_SOCKETID[SOCKETID_HAS_PIN[socketid]]
-            delete SOCKETID_HAS_PIN[socketid]
+            delete PIN_HAS_SOCKETID[SOCKETID_HAS_PIN[socket.id]]
+            delete SOCKETID_HAS_PIN[socket.id]
         },100)
 
     });
