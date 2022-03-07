@@ -51,18 +51,41 @@ router.post("/payload", (req, res) => {
 
 let PIN_HAS_SOCKETID = {}
 let SOCKETID_HAS_PIN = {}
+let OVERTIME_SOCKETIDS = []
 let interval;
 
 io.on("connection", (socket) => {
     console.log("connection received")
+
+    socket.on("OVERTIME", (pin) => {
+        OVERTIME_SOCKETIDS[] = socket.id
+        console.log("Overtime with SocketID: "+socket.id)
+        io.to(socket.id).emit('PINS_CONNECTED',Object.keys(PIN_HAS_SOCKETID));
+    })
+
     socket.on("PIN", (pin) => {
+        console.log("PIN: "+pin,"SocketID: "+socket.id)
+
         PIN_HAS_SOCKETID[pin] = socket.id
         SOCKETID_HAS_PIN[socket.id] = pin
-        console.log("PIN: "+pin,"SocketID: "+socket.id)
+
+        OVERTIME_SOCKETIDS.map(socketid=>{
+            io.to(socketid).emit('PIN_CONNECTED',SOCKETID_HAS_PIN[socketid]);
+        })
     })
     socket.on("disconnect", () => {
         console.log("Disconnect PIN: "+SOCKETID_HAS_PIN[socket.id])
         console.log("Disconnect: "+socket.id)
+
+        OVERTIME_SOCKETIDS.map(socketid=>{
+            io.to(socketid).emit('PIN_DISCONNECTED',SOCKETID_HAS_PIN[socketid]);
+        })
+
+        setTimeout(function(){
+            delete PIN_HAS_SOCKETID[SOCKETID_HAS_PIN[socketid]]
+            delete SOCKETID_HAS_PIN[socketid]
+        },100)
+
     });
 });
 
