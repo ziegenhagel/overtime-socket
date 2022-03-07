@@ -58,7 +58,7 @@ io.on("connection", (socket) => {
     console.log("connection received")
 
     socket.on("OVERTIME", (pin) => {
-        OVERTIME_SOCKETIDS[] = socket.id
+        OVERTIME_SOCKETIDS.push(socket.id)
         console.log("Overtime with SocketID: "+socket.id)
         io.to(socket.id).emit('PINS_CONNECTED',Object.keys(PIN_HAS_SOCKETID));
     })
