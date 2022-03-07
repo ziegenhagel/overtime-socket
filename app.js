@@ -73,7 +73,7 @@ io.on("connection", (socket) => {
         SOCKETID_HAS_PIN[socket.id] = pin
 
         OVERTIME_SOCKETIDS.map(socketid=>{
-            io.to(socketid).emit('PIN_CONNECTED',SOCKETID_HAS_PIN[socketid]);
+            io.to(socketid).emit('PIN_CONNECTED',SOCKETID_HAS_PIN[socket.id]);
         })
     })
     socket.on("disconnect", () => {
@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
         console.log("Disconnect: "+socket.id)
 
         OVERTIME_SOCKETIDS.map(socketid=>{
-            io.to(socketid).emit('PIN_DISCONNECTED',SOCKETID_HAS_PIN[socketid]);
+            io.to(socketid).emit('PIN_DISCONNECTED',SOCKETID_HAS_PIN[socket.id]);
         })
 
         setTimeout(function(){
