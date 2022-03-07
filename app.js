@@ -19,7 +19,10 @@ const io = require("socket.io")(server, { cors: { origin: '*', } }); ;
 const router = express.Router();
 app.use(router);
 
+console.log("Starttedd app.jsss")
+
 router.get("/", (req, res) => {
+    console.log("Received  all on /")
     res.send({succes:true}).status(200);
 })
 
