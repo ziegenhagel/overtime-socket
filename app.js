@@ -60,6 +60,8 @@ let interval;
 io.on("connection", (socket) => {
     console.log("connection received")
 
+    socket.on("broadcast", data => socket.broadcast.emit("broadcast", data))
+
     socket.on("OVERTIME", (pin) => {
         OVERTIME_SOCKETIDS.push(socket.id)
         console.log("Overtime with SocketID: "+socket.id)
